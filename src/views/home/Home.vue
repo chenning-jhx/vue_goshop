@@ -5,12 +5,12 @@
       <div slot="center">购物街</div>
     </nav-bar>
     <!-- 轮播图区域 -->
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item
         v-for="(item, index) in swiperList"
         :key="index"
         @click="swiperClick(item.link)"
-        ><img :src="item.image" alt=""
+        ><img :src="item.image"
       /></van-swipe-item>
     </van-swipe>
     <!-- 推荐区域 -->
@@ -55,10 +55,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nav-bar {
-  background-color: var(--color-tint);
-  font-size: 0.426667rem;
-  font-weight: 600;
-  color: #fff;
+.home {
+  .nav-bar {
+    background-color: var(--color-tint);
+    font-size: 0.426667rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .van-swipe {
+    .van-swipe-item {
+      img {
+        width: 100%;
+      }
+    }
+  }
 }
 </style>
