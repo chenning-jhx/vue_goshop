@@ -23,5 +23,6 @@ export default {
   box-shadow: 0 -0.026667rem 0 #eee;
   font-size: 0.32rem;
   font-weight: 600;
+  background-color: #fff;
 }
 </style>

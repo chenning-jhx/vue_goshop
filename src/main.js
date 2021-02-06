@@ -8,9 +8,11 @@ import "lib-flexible/flexible.js"
 
 //引入vant插件
 import { Swipe, SwipeItem } from 'vant';
+import { List } from 'vant';
 
 Vue.use(Swipe);
 Vue.use(SwipeItem);
+Vue.use(List);
 
 
 //网络请求
