@@ -17,22 +17,26 @@
     <recommend-view :recommendList="recommendList"></recommend-view>
     <!-- 本周流行区域 -->
     <popular></popular>
-
     <van-list
       v-model="goodsLoading"
       :finished="goodsFinished"
       finished-text="没有更多了"
       :immediate-check="false"
-      @load="loading"
+      @load="loadMore"
     >
       <!-- tabctrol导航区域 -->
-      <tab-ctrol
-        :tabCtrolList="tabCtrolList"
-        @tabCtrolClick="tabCtrolClick"
-      ></tab-ctrol>
+      <van-sticky :offset-top="88">
+        <tab-ctrol
+          :tabCtrolList="tabCtrolList"
+          @tabCtrolClick="tabCtrolClick"
+          ref="tabCtrol"
+        ></tab-ctrol>
+      </van-sticky>
       <!-- 商品列表区域 -->
       <goods-list :homeGoodsList="showGoodsList"></goods-list>
     </van-list>
+    <!-- 返回顶部按钮 -->
+    <back-top></back-top>
   </div>
 </template>
 
@@ -42,6 +46,8 @@ import RecommendView from "./childCom/RecommendView";
 import Popular from "./childCom/Popular";
 import TabCtrol from "@/components/content/tabctrol/TabCtrol";
 import GoodsList from "@/components/content/goods/GoodsList";
+import BackTop from "@/components/content/backtop/BackTop";
+import { debounce } from "@/common/utils";
 export default {
   name: "Home",
   components: {
@@ -50,6 +56,7 @@ export default {
     Popular,
     TabCtrol,
     GoodsList,
+    BackTop,
   },
   data() {
     return {
@@ -62,9 +69,13 @@ export default {
         new: { page: 0, list: [] }, //新款商品数据 页数
         sell: { page: 0, list: [] }, //精选商品数据 页数
       },
-      currentType: "pop",
+      currentType: "pop", //当前选择的type
       goodsLoading: false,
       goodsFinished: false,
+      isShowimg: false, //是否显示backTop
+      saveY: 0,
+      scrollY: 0,
+      tabScrollY: 0,
     };
   },
   created() {
@@ -72,6 +83,24 @@ export default {
     this.getHomeGoodsListData("pop");
     this.getHomeGoodsListData("new");
     this.getHomeGoodsListData("sell");
+  },
+  mounted() {
+    //防抖。上滑加载更多
+    debounce(this.loadMore(), 1000);
+    //滚动操作监听
+    window.addEventListener("scroll", this.handleScroll);
+    //
+  },
+  destroyed() {
+    //移除滚动操作监听
+    document.removeEventListener("scroll", this.handleScroll);
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  },
+  activated() {
+    document.body.scrollTop = document.documentElement.scrollTop = this.scrollY;
+  },
+  deactivated() {
+    this.scrollY = this.saveY;
   },
   computed: {
     //首页商品数据
@@ -108,6 +137,8 @@ export default {
         default:
           this.currentType = "pop";
       }
+      document.body.scrollTop = document.documentElement.scrollTop =
+        this.tabScrollY - 88;
     },
 
     //发起网络请求，获取商品列表数据
@@ -120,10 +151,24 @@ export default {
       this.goods[type].list = [...this.goods[type].list, ...res.data.list];
     },
 
-    loading() {
-      console.log(this.goodsLoading);
+    //上滑加载更多
+    loadMore() {
       this.getHomeGoodsListData(this.currentType);
       this.goodsLoading = false;
+    },
+
+    // 滚动操作监听
+    handleScroll(e) {
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      this.saveY = scrollTop;
+      //获取tabctrol距离顶部的高度
+      this.tabScrollY =
+        this.tabScrollY > this.$refs.tabCtrol.$el.offsetTop
+          ? this.tabScrollY
+          : this.$refs.tabCtrol.$el.offsetTop;
     },
   },
 };

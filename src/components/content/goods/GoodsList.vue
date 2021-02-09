@@ -29,5 +29,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  margin-top: 0.266667rem;
 }
 </style>

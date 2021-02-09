@@ -36,18 +36,19 @@ export default {
 <style lang="less" scoped>
 .tab-ctrol {
   display: flex;
-  padding: 0.266667rem;
   font-size: 0.48rem;
   font-weight: 600;
+  background-color: #fff;
+  margin-bottom: 0.133333rem;
   .tab-ctrol-item {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 0.133333rem;
+    padding: 0.266667rem;
   }
   .active {
-    border-bottom: 0.026667rem solid var(--color-tint);
+    border-bottom: 0.106667rem solid var(--color-tint);
   }
 }
 </style>

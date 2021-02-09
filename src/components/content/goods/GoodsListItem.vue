@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-list-item">
+  <div class="goods-list-item" @click="goGoodDetail">
     <img :src="showImage" />
     <div class="goods-info">
       <div class="goods-title">{{ goods.title }}</div>
@@ -23,6 +23,12 @@ export default {
       return this.goods.image || this.goods.show.img;
     },
   },
+  methods: {
+    //监听商品点击事件
+    goGoodDetail() {
+      this.$router.push({ path: "/detail", query: { iid: this.goods.iid } });
+    },
+  },
 };
 </script>
 
@@ -30,7 +36,7 @@ export default {
 .goods-list-item {
   position: relative;
   width: 48%;
-  padding-bottom: 0.8rem;
+  padding-bottom: 1.066667rem;
   img {
     width: 100%;
   }
@@ -38,6 +44,7 @@ export default {
     font-size: 0.373333rem;
     .goods-title {
       padding: 0 0.133333rem;
+      margin-bottom: 0.266667rem;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
@@ -49,8 +56,9 @@ export default {
       bottom: 0.266667rem;
       display: flex;
       justify-content: space-between;
-      padding: 0 0.133333rem;
       width: 100%;
+      padding: 0 0.133333rem;
+      font-size: 0.426667rem;
       .goods-price {
         color: var(--color-tint);
       }
@@ -58,8 +66,11 @@ export default {
         display: flex;
         &::before {
           content: "";
-          width: 0.373333rem;
-          height: 0.373333rem;
+          width: 0.426667rem;
+          height: 0.426667rem;
+          background-image: url(../../../assets/image/common/collect.svg);
+          background-size: cover;
+          margin-right: 0.08rem;
         }
       }
     }
